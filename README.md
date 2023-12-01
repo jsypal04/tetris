@@ -1,3 +1,7 @@
+## Project Overview
+
+A basic implementation of the classic tetris game.
+
 ## Folder Structure
 
 The workspace contains two main folders:
