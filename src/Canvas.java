@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 
 public class Canvas extends JPanel implements KeyListener {
     public Screen gameScreen;
+    private int linesCleared = 0;
+    private int score = 0;
 
     public Canvas() {
         super();
@@ -16,6 +18,11 @@ public class Canvas extends JPanel implements KeyListener {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        g.drawLine(200, 0, 200, 438);
+        g.drawString("Lines cleared: " + Integer.toString(this.linesCleared), 210, 30);
+        g.drawString("Score: " + Integer.toString(this.score), 210, 80);
+        g.drawString("Next: ", 210, 180);
 
         for (int i = 0; i < this.gameScreen.getHeight(); i++) {
             for (int j = 0; j < this.gameScreen.getWidth(); j++) {
@@ -33,12 +40,6 @@ public class Canvas extends JPanel implements KeyListener {
 
     public int checkLine() {
         return this.gameScreen.checkLine();
-        // int row = this.gameScreen.checkLine();
-        // if (row != -1) {
-        //     this.gameScreen.removeRow(row);
-        //     return 1;
-        // }
-        // return 0;
     }
 
     public void removeRow(int row) {
@@ -66,6 +67,18 @@ public class Canvas extends JPanel implements KeyListener {
         else if (e.getKeyCode() == 32) {
             // do something
         }
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getScore() {
+        return this.score;
+    }
+
+    public void setLinesCleared(int linesCleared) {
+        this.linesCleared = linesCleared;
     }
 
     public void keyTyped(KeyEvent e) {}

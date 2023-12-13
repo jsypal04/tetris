@@ -1,8 +1,10 @@
 public class Shape {
     private int[][] coords;
+    private String name;
 
-    public Shape(int[][] initCoords) {
+    public Shape(int[][] initCoords, String name) {
         this.coords = initCoords;
+        this.name = name;
     }
 
     public void rotate() {
@@ -36,5 +38,9 @@ public class Shape {
 
     public int[][] getCoords() {
         return this.coords;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

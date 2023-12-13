@@ -20,7 +20,7 @@ class Window extends JFrame {
         super(title);
 
         // set constants
-        this.WIDTH = 216;
+        this.WIDTH = 216 + 100;
         this.HEIGHT = 438;
         this.frameRate = 1;
         this.second = 1000000000 / 2;
@@ -58,11 +58,12 @@ class Window extends JFrame {
                 if (row != -1) {
                     this.canvas.removeRow(row);
                     this.linesCleared++;
+                    this.canvas.setLinesCleared(this.linesCleared);
+                    this.canvas.setScore(this.canvas.getScore() + 10);
 
-                    // speed up the game every three rows cleared
-                    if (this.linesCleared % 3 == 0) {
-                        this.second /= 1.5;
-                    }
+                    // speed up the game every line cleared
+                    this.frameRate += 0.5;
+
                     System.out.println(this.linesCleared);
                 }
 

@@ -6,6 +6,7 @@ public class Screen {
     private int HEIGHT;
     private int[][] model;
     private Shape activeShape;
+    private Shape nextShape;
     private HashMap<String, int[][]> shapes;
     private String[] shapeNames = {"line", "square", "elbow1", "elbow2", "l1", "l2"};
 
@@ -38,15 +39,8 @@ public class Screen {
         this.shapes.put("l1", l1);
         this.shapes.put("l2", l2);
 
-        // copy the coordinates into a new array, this ensures that the start coordinates don't get overidden when the shape moves
-        int[][] newCoords = new int[4][2];
-        int[][] startCoords = this.shapes.get("line");
-        for (int i = 0; i < startCoords.length; i++) {
-            newCoords[i][0] = startCoords[i][0];
-            newCoords[i][1] = startCoords[i][1];
-        }
-        // set the new active shape and draw it
-        this.activeShape = new Shape(newCoords);
+        this.nextShape = this.createShape();
+        this.activeShape = this.createShape();
         this.drawShape(this.activeShape.getCoords());
     }
 
@@ -73,17 +67,7 @@ public class Screen {
      * @return - returns a false if the shape can be moved down or truw if it has landed
      */
     public boolean shapeHasLanded() {
-        int[][] coords = this.activeShape.getCoords();
-
-        // debugging code
-        // for (int i = 0; i < coords.length; i++) {
-        //     System.out.print(coords[i][0]);
-        //     System.out.print(", ");
-        //     System.out.print(coords[i][1]);
-        //     System.out.print("   ");
-        // } 
-        // System.out.println();
-        // end debugging code 
+        int[][] coords = this.activeShape.getCoords(); 
 
         for (int i = 0; i < coords.length; i++) {
             if (coords[i][0] == this.HEIGHT - 1) {
@@ -102,16 +86,9 @@ public class Screen {
             for (int i = 0; i < coords.length; i++) {
                 this.model[coords[i][0]][coords[i][1]] = 2;
             }
-            Random rand = new Random();
-            String name = this.shapeNames[rand.nextInt(this.shapeNames.length)];
-            // copy the coordinates into a new array, this ensures that the start coordinates don't get overidden when the shape moves
-            int[][] newCoords = new int[4][2];
-            int[][] startCoords = this.shapes.get(name);
-            for (int i = 0; i < startCoords.length; i++) {
-                newCoords[i][0] = startCoords[i][0];
-                newCoords[i][1] = startCoords[i][1];
-            }
-            this.activeShape = new Shape(newCoords);
+        
+            this.activeShape = this.nextShape;
+            this.nextShape = this.createShape();
             this.drawShape(this.activeShape.getCoords());
         }
         else {
@@ -216,6 +193,20 @@ public class Screen {
         }
     }
 
+    public Shape createShape() {
+        Random rand = new Random();
+        String name = this.shapeNames[rand.nextInt(this.shapeNames.length)];
+        // copy the coordinates into a new array, this ensures that the start coordinates don't get overidden when the shape moves
+        int[][] newCoords = new int[4][2];
+        int[][] startCoords = this.shapes.get(name);
+        for (int i = 0; i < startCoords.length; i++) {
+            newCoords[i][0] = startCoords[i][0];
+            newCoords[i][1] = startCoords[i][1];
+        }
+        System.out.println(name);
+        return new Shape(newCoords, name);
+    }
+
     public void print() {
         for (int i = 0; i < this.HEIGHT; i++) {
             for (int j = 0; j < this.WIDTH; j++) {
@@ -228,6 +219,10 @@ public class Screen {
 
     public int getModelIndex(int row, int col) {
         return this.model[row][col];
+    }
+
+    public Shape getNextShape() {
+        return this.nextShape;
     }
 
     public int getHeight() {
